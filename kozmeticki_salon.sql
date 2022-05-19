@@ -6,17 +6,20 @@ use kozmeticki_salon;
 
 create table djelatnik(
     sifra int not null primary key auto_increment,
-    osoba int not null,
-    iban  varchar(50)
+    ime varchar(50) not null,
+    prezime varchar(50) not null,
+    email varchar(100) not null,
+    iban  varchar(50),
+    korisnik int not null 
 );
-
 
 create table korisnik(
     sifra int not null primary key auto_increment,
-    osoba int not null,
+    ime varchar(50) not null,
+    prezime varchar(50) not null,
+    email varchar(100),
     lozinka varchar(50),
     usluga int not null,
-    djelatnik int not null,
     termin datetime 
 );
 
@@ -34,19 +37,12 @@ create table usluga(
     trajanje int,
     cijena decimal(18,3),
     djelatnik  int not null,
-    korisnik int not null
+    korisnik int not null,
+    termin datetime
 );
 
-create table osoba(
-    sifra int not null primary key auto_increment,
-    ime varchar(50) not null,
-    prezime varchar(50) not null,
-    email varchar(100),
-    oib char(11)
-);
-
-alter table korisnik add foreign key (osoba) references osoba(sifra);
-alter table djelatnik add foreign key (osoba) references osoba(sifra);
-alter table korisnik add foreign key(djelatnik) references djelatnik(sifra);
-alter table korisnik add foreign key (usluga) references usluga(sifra);
-alter table termin add foreign key(korisnik) references korisnik(sifra);
+alter table termin add foreign key (korisnik) references korisnik(sifra);
+alter table termin add foreign key (usluga) references usluga(sifra);
+alter table termin add foreign key(usluga) references usluga(sifra);
+alter table usluga add foreign key(korisnik) references korisnik(sifra);
+alter table djelatnik add foreign key(korisnik) references korisnik(sifra);
